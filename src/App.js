@@ -1,24 +1,42 @@
 import React from 'react';
-import JumboData from "./fixtures/jumbo.json";
-import Jumbotron from "./components/jumbotron";
+import { BrowserRouter as Router } from 'react-router-dom';
+import * as ROUTES from './constants/routes';
+import { Home, Browse, SignIn, SignUp } from './pages';
+import { IsUserRedirect, ProtectedRoute } from './helpers/routes';
+import { useAuthListener } from './hooks';
 
 export default function App() {
-	return (
-		<Jumbotron.Container>
-			{JumboData.map((item) => (
-				<Jumbotron
-					key={item.id}
-					direction={item.direction}
-				>
-					<Jumbotron.Pane>
-						<Jumbotron.Title>{item.title}</Jumbotron.Title>
-						<Jumbotron.SubTitle>{item.subTitle}</Jumbotron.SubTitle>
-					</Jumbotron.Pane>
-					<Jumbotron.Pane>
-						<Jumbotron.Image src={item.image} alt={item.alt} />
-					</Jumbotron.Pane>
-				</Jumbotron>
-			))}
-		</Jumbotron.Container>
-	);
+  const user = useAuthListener();
+
+  return (
+    <Router>
+      <IsUserRedirect
+        user={user}
+        loggedInPath={ROUTES.BROWSE}
+        path={ROUTES.SIGN_IN}
+        exact
+      >
+        <SignIn />
+      </IsUserRedirect>
+      <IsUserRedirect
+        user={user}
+        loggedInPath={ROUTES.BROWSE}
+        path={ROUTES.SIGN_UP}
+        exact
+      >
+        <SignUp />
+      </IsUserRedirect>
+      <ProtectedRoute user={user} path={ROUTES.BROWSE} exact>
+        <Browse />
+      </ProtectedRoute>
+      <IsUserRedirect
+        user={user}
+        loggedInPath={ROUTES.BROWSE}
+        path={ROUTES.HOME}
+        exact
+      >
+        <Home />
+      </IsUserRedirect>
+    </Router>
+  );
 }
