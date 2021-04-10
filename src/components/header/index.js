@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link as ReactRouterLink } from 'react-router-dom';
+import { Link as ReachRouterLink } from 'react-router-dom';
 import {
   Background,
   Feature,
@@ -20,7 +20,13 @@ import {
 } from './styles/header';
 
 export default function Header({ bg = true, children, ...restProps }) {
-  return bg ? <Background {...restProps}>{children}</Background> : children;
+  return bg ? (
+    <Background {...restProps} data-testid="header-bg">
+      {children}
+    </Background>
+  ) : (
+    children
+  );
 }
 
 Header.Feature = function HeaderFeature({ children, ...restProps }) {
@@ -53,6 +59,7 @@ Header.Search = function HeaderSearch({
     <Search {...restProps}>
       <SearchIcon
         onClick={() => setSearchActive((preSearchActive) => !preSearchActive)}
+        data-testid="search-click"
       >
         <img src="/images/icons/search.png" alt="Search" />
       </SearchIcon>
@@ -61,6 +68,7 @@ Header.Search = function HeaderSearch({
         onChange={({ target }) => setSearchTerm(target.value)}
         placeholder="Search films and series"
         active={searchActive}
+        data-testid="search-input"
       />
     </Search>
   );
@@ -84,9 +92,9 @@ Header.Group = function HeaderGroup({ children, ...restProps }) {
 
 Header.Logo = function HeaderLogo({ to, children, ...restProps }) {
   return (
-    <ReactRouterLink to={to}>
+    <ReachRouterLink to={to}>
       <Logo {...restProps}>{children}</Logo>
-    </ReactRouterLink>
+    </ReachRouterLink>
   );
 };
 

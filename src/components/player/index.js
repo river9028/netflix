@@ -24,6 +24,7 @@ Card.Video = function PlayerVideo({ src, ...restProps }) {
             setShowPlayer(false);
           }}
           {...restProps}
+          data-testid="player"
         >
           <Inner>
             <video id="netflix-player" controls>

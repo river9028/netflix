@@ -56,6 +56,27 @@ Card.Meta = function CardMeta({ children, ...restProps }) {
   return <Meta {...restProps}>{children}</Meta>;
 };
 
+Card.Item = function CardItem({ item, children, ...restProps }) {
+  const { setShowFeature, setItemFeature } = useContext(FeatureContext);
+
+  return (
+    <Item
+      {...restProps}
+      onClick={() => {
+        setItemFeature(item);
+        setShowFeature(true);
+      }}
+      {...restProps}
+    >
+      {children}
+    </Item>
+  );
+};
+
+Card.Image = function CardImage({ src, ...restProps }) {
+  return <Image src={src} {...restProps} />;
+};
+
 Card.Feature = function CardFeature({ category, children, ...restProps }) {
   const { showFeature, itemFeature, setShowFeature } = useContext(
     FeatureContext
@@ -86,45 +107,4 @@ Card.Feature = function CardFeature({ category, children, ...restProps }) {
       </Content>
     </Feature>
   ) : null;
-};
-
-Card.FeatureTitle = function CardFeatureTitle({ children, ...restProps }) {
-  return <FeatureTitle {...restProps}>{children}</FeatureTitle>;
-};
-
-Card.FeatureText = function CardFeatureText({ children, ...restProps }) {
-  return <FeatureText {...restProps}>{children}</FeatureText>;
-};
-
-Card.FeatureClose = function CardFeatureClose({ children, ...restProps }) {
-  return <FeatureClose {...restProps}>{children}</FeatureClose>;
-};
-
-Card.Maturity = function CardMaturity({ children, ...restProps }) {
-  return <Maturity {...restProps}>{children}</Maturity>;
-};
-
-Card.Content = function CardContent({ children, ...restProps }) {
-  return <Content {...restProps}>{children}</Content>;
-};
-
-Card.Item = function CardItem({ item, children, ...restProps }) {
-  const { setShowFeature, setItemFeature } = useContext(FeatureContext);
-
-  return (
-    <Item
-      {...restProps}
-      onClick={() => {
-        setItemFeature(item);
-        setShowFeature(true);
-      }}
-      {...restProps}
-    >
-      {children}
-    </Item>
-  );
-};
-
-Card.Image = function CardImage({ src, ...restProps }) {
-  return <Image src={src} {...restProps} />;
 };

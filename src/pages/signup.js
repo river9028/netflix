@@ -7,34 +7,35 @@ import { Form } from '../components';
 import * as ROUTES from '../constants/routes';
 
 export default function SignUp() {
-  const histotry = useHistory();
+  const history = useHistory();
   const { firebase } = useContext(FirebaseContext);
+
   const [firstName, setFirstName] = useState('');
-  const [emailAddres, setEmailAddres] = useState('');
+  const [emailAddress, setEmailAddress] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const isInvalid = firstName === '' || password === '' || emailAddres === '';
+  const isInvalid = firstName === '' || password === '' || emailAddress === '';
 
-  const handleSignUp = (event) => {
+  const handleSignup = (event) => {
     event.preventDefault();
 
-    // do firebase stuff
-    firebase
+    return firebase
       .auth()
-      .createUserWithEmailAndPassword(emailAddres, password)
-      .then((result) => {
+      .createUserWithEmailAndPassword(emailAddress, password)
+      .then((result) =>
         result.user
           .updateProfile({
             displayName: firstName,
             photoURL: Math.floor(Math.random() * 5) + 1,
           })
           .then(() => {
-            histotry.push(ROUTES.BROWSE);
-          });
-      })
+            history.push(ROUTES.BROWSE);
+          })
+      )
       .catch((error) => {
-        setEmailAddres('');
+        setFirstName('');
+        setEmailAddress('');
         setPassword('');
         setError(error.message);
       });
@@ -46,16 +47,17 @@ export default function SignUp() {
         <Form>
           <Form.Title>Sign Up</Form.Title>
           {error && <Form.Error>{error}</Form.Error>}
-          <Form.Base onSubmit={handleSignUp} method="POST">
+
+          <Form.Base onSubmit={handleSignup} method="POST">
             <Form.Input
-              placeholder="First Name"
+              placeholder="First name"
               value={firstName}
               onChange={({ target }) => setFirstName(target.value)}
             />
             <Form.Input
-              placeholder="Email addres"
-              value={emailAddres}
-              onChange={({ target }) => setEmailAddres(target.value)}
+              placeholder="Email address"
+              value={emailAddress}
+              onChange={({ target }) => setEmailAddress(target.value)}
             />
             <Form.Input
               type="password"
@@ -64,18 +66,22 @@ export default function SignUp() {
               value={password}
               onChange={({ target }) => setPassword(target.value)}
             />
-            <Form.Submit disabled={isInvalid} type="submit">
+            <Form.Submit
+              data-testid="sign-up"
+              disabled={isInvalid}
+              type="submit"
+            >
               Sign Up
             </Form.Submit>
           </Form.Base>
 
           <Form.Text>
-            Already a user? <Form.Link to="/signin">Sign in now.</Form.Link>
-            <Form.TextSmall>
-              This page is protected by Google reCAPTCHA to ensure you're not a
-              bot. Learn more.
-            </Form.TextSmall>
+            Already a user? <Form.Link to="/signin">Sign Up Now.</Form.Link>
           </Form.Text>
+          <Form.TextSmall>
+            This page is protected by Google reCAPTCHA to ensure you're not a
+            bot. Learn more.
+          </Form.TextSmall>
         </Form>
       </HeaderContainer>
       <FooterContainer />
